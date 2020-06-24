@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+    motion:
+        build: ./motion
+        restart: always
+        environment:
+            - TZ
+        volumes: 
+            - motion-etc:/usr/local/etc/motion
+            - motion-data:/var/lib/motion
+            - motion-log:/var/log/motion
+            - rclone-etc:/root/.config/rclone
+        ports:
+            - "8080:8080"
+            - "8081:8081"
+        devices:
+            - /dev/video0:/dev/video0
+volumes:
+    motion-etc:
+    motion-data:
+    motion-log:
+    rclone-etc:

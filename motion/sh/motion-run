@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+echo "Start motion at $(date -u +%Y-%m-%d_%H:%M)"
+
+if [ ! -f /usr/local/etc/motion/motion.conf ]; then
+    cp -f /usr/local/etc/motion-dist/motion.conf /usr/local/etc/motion/motion.conf
+fi 
+
+/usr/local/bin/motion -n
