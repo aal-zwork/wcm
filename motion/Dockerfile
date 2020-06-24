@@ -4,7 +4,8 @@ WORKDIR /tmp
 RUN apk update && apk upgrade && \
     apk add --no-cache git autoconf automake build-base linux-headers \
     libjpeg-turbo-dev libmicrohttpd-dev libzip-dev ffmpeg-dev gettext-dev \
-    libmicrohttpd ffmpeg gettext libjpeg-turbo tzdata curl bash unzip && \
+    libmicrohttpd ffmpeg gettext libjpeg-turbo tzdata curl bash unzip \
+    alsa-utils && \
     curl https://rclone.org/install.sh | bash && \
     git clone https://github.com/Motion-Project/motion.git && \
     cd motion && autoreconf -fiv && \
