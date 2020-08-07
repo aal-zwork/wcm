@@ -29,12 +29,13 @@ fi
 
 # AUDIO REСORD
 [[ -z "$MOTION_AUDIO" ]] && exit 0
-[[ -z "$MOTION_CAM_AUDIO" ]] && audio_hw="plughw:1" || audio_hw="${MOTION_CAM_AUDIO[$cam_id]}"
+audio_hw_name_var="MOTION_AUDIO_$cam_id"
+audio_hw=${!audio_hw_name_var:-"plughw:0"}
 if [[ -z "$audio_hw" ]]; then echo "[WRN] arecord audio_hw for cam($cam_id) is ''"; else
   #audiofilepath=$target_dir$subdir/$hour$minutes$seconds-$event.wav
   audiofilepath=$filepath.wav
   if [[ -z "$audiofilepath" ]]; then echo "[ERR] arecord audiofilepath is ''"; else
-    [[ ! -z "$DEBUG" ]] && echo "[LOG] mkdir -p $target_dir$subdir && (arecord -D $audio_hw -r 16000 -f S16_LE $audiofilepath &)" 
+    [[ ! -z "$DEBUG" ]] && echo "[LOG] mkdir -p $target_dir$subdir; (arecord -D $audio_hw -r 16000 -f S16_LE $audiofilepath &)" 
     mkdir -p $target_dir$subdir;
     arecord -D $audio_hw -r 16000 -f S16_LE $audiofilepath &
   fi

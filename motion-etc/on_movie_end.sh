@@ -35,7 +35,8 @@ rclone copy $filepath $WCM_STORER:$remotedir &
 
 # AUDIO COPY
 [[ -z "$MOTION_AUDIO" ]] && exit 0
-[[ -z "$MOTION_CAM_AUDIO" ]] && audio_hw="plughw:1" || audio_hw="${MOTION_CAM_AUDIO[$cam_id]}"
+audio_hw_name_var="MOTION_AUDIO_$cam_id"
+audio_hw=${!audio_hw_name_var:-"plughw:0"}
 #ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*-$event.wav)
 basenfp=$(basename $filepath)
 ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*$basename.wav)
