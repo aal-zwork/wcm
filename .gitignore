@@ -1,3 +1,4 @@
-/.env
+/*.env
+!/example.env
 
-volumes/**
+rclone-etc/rclone.conf
