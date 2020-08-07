@@ -8,5 +8,4 @@
 
 #### Show audio
 
-    sudo docker-compose run --rm --entrypoint arecord motion -L 
-    sudo docker-compose run --rm --entrypoint aplay motion -l 
+    sudo docker-compose run --rm --entrypoint arecord motion -l
