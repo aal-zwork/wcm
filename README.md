@@ -1,3 +1,5 @@
 ### Install
 
-    sudo docker-compose run --entrypoint rclone motion config
+    cp example.env default.env
+    sudo docker-compose run --rm --entrypoint rclone motion config
+    sudo docker-compose up
