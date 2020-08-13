@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-[[ ! -z "$DEBUG" ]] && echo "[LOG] run $0" 
+[[ ! -z "$DEBUG" ]] && echo "[LOG:$BASHPID] run $0" 
 if [ $# -eq 0 ]; then
   echo "[ERR] command line contains no arguments"
   exit 1

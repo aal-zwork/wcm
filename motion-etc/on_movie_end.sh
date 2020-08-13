@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-[[ ! -z "$DEBUG" ]] && echo "[LOG] run $0" 
+[[ ! -z "$DEBUG" ]] && echo "[LOG:$BASHPID] run $0" 
 if [ $# -eq 0 ]; then
   echo "[ERR] command line contains no arguments"
   exit 1
@@ -37,9 +37,7 @@ rclone copy $filepath $WCM_STORER:$remotedir &
 [[ -z "$MOTION_AUDIO" ]] && exit 0
 audio_hw_name_var="MOTION_AUDIO_$cam_id"
 audio_hw=${!audio_hw_name_var:-"plughw:0"}
-#ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*-$event.wav)
-basenfp=$(basename $filepath)
-ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*$basename.wav)
+ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*.wav)
 arecord_pid=$(echo $ps_line | awk '{print $1}')
 if [[ -z "$arecord_pid" ]]; then echo "[ERR] kill arecord_pid is ''"; else
   [[ ! -z "$DEBUG" ]] && echo "[LOG] kill $arecord_pid"
@@ -48,7 +46,7 @@ if [[ -z "$arecord_pid" ]]; then echo "[ERR] kill arecord_pid is ''"; else
   #audiofilepath=$(echo $ps_line | awk '{print $11}')
   audiofilepath=$filepath.wav
   if [[ -z "$audiofilepath" ]]; then echo "[ERR] audio rclone copy  wrong audiofilepath is ''"; else
-    [[ ! -z "$DEBUG" ]] && echo "[LOG] sleep 5 && (kill -9 $arecord_pid; rclone copy $audiofilepath $WCM_STORER:$remotedir &)"
-    sleep 5 && (kill -9 $arecord_pid; rclone copy $audiofilepath $WCM_STORER:$remotedir &)
+    [[ ! -z "$DEBUG" ]] && echo "[LOG] (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
+    (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &
   fi
 fi
