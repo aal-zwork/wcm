@@ -43,8 +43,8 @@ audio_hw=${!audio_hw_name_var:-"plughw:0"}
 ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*.wav)
 arecord_pid=$(echo $ps_line | awk '{print $1}')
 if [[ -z "$arecord_pid" ]]; then echo "$PREFERR kill arecord_pid is ''"; else
-  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG kill $arecord_pid"
-  kill $arecord_pid
+  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG kill $arecord_pid &> /dev/null"
+  kill $arecord_pid &> /dev/null
 
   #audiofilepath=$(echo $ps_line | awk '{print $11}')
   audiofilepath=$filepath.wav
