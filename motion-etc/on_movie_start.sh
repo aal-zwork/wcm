@@ -37,7 +37,7 @@ audio_hw=${!audio_hw_name_var:-"plughw:0"}
 ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*.wav)
 arecord_pid=$(echo $ps_line | awk '{print $1}')
 if [[ ! -z "$arecord_pid" ]]; then 
-  echo "$PREFWRN kill -9 $arecord_pid &> /dev/null" 
+  [[ ! -z "$DEBUG" ]] && echo "$PREFWRN kill -9 $arecord_pid &> /dev/null" 
   kill -9 $arecord_pid &> /dev/null 
 fi
 if [[ -z "$audio_hw" ]]; then echo "$PREFWRN arecord audio_hw for cam($cam_id) is ''"; else

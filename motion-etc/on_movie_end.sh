@@ -49,7 +49,7 @@ if [[ -z "$arecord_pid" ]]; then echo "$PREFERR kill arecord_pid is ''"; else
   #audiofilepath=$(echo $ps_line | awk '{print $11}')
   audiofilepath=$filepath.wav
   if [[ -z "$audiofilepath" ]]; then echo "$PREFERR audio rclone copy  wrong audiofilepath is ''"; else
-    [[ ! -z "$DEBUG" ]] && echo "$PREFLOG (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
+    [[ ! -z "$DEBUG" ]] && echo "$PREFLOG (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
     (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &
   fi
 fi
