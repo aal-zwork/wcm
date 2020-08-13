@@ -1,7 +1,10 @@
 #! /usr/bin/env bash
-[[ ! -z "$DEBUG" ]] && echo "[LOG:$BASHPID] run $0" 
+PREFLOG="[LOG:$BASHPID]"
+PREFWRN="[WRN:$BASHPID]"
+PREFERR="[ERR:$BASHPID]"
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG run $0" 
 if [ $# -eq 0 ]; then
-  echo "[ERR] command line contains no arguments"
+  echo "$PREFERR command line contains no arguments"
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
@@ -23,6 +26,6 @@ dirpath=$(dirname $filepath)
 subdir=${dirpath/$target_dir/}
 remotedir=$WCM_ID$subdir
 
-[[ ! -z "$DEBUG" ]] && echo "[LOG] rclone copy $filepath $WCM_STORER:$remotedir" 
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG rclone copy $filepath $WCM_STORER:$remotedir" 
 [[ ! -z "$filepath" ]] && [[ ! -z "$remotedir" ]] && (rclone copy $filepath $WCM_STORER:$remotedir &) || \
-  echo "[ERR] rclone copy wrong filepath($filepath) or remotedir($remotedir)"
+  echo "$PREFERR rclone copy wrong filepath($filepath) or remotedir($remotedir)"

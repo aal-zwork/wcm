@@ -1,7 +1,10 @@
 #! /usr/bin/env bash
-[[ ! -z "$DEBUG" ]] && echo "[LOG:$BASHPID] run $0" 
+PREFLOG="[LOG:$BASHPID]"
+PREFWRN="[WRN:$BASHPID]"
+PREFERR="[ERR:$BASHPID]"
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG run $0" 
 if [ $# -eq 0 ]; then
-  echo "[ERR] command line contains no arguments"
+  echo "$PREFERR command line contains no arguments"
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}

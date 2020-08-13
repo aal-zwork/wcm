@@ -1,7 +1,10 @@
 #! /usr/bin/env bash
-[[ ! -z "$DEBUG" ]] && echo "[LOG:$BASHPID] run $0" 
+PREFLOG="[LOG:$BASHPID]"
+PREFWRN="[WRN:$BASHPID]"
+PREFERR="[ERR:$BASHPID]"
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG run $0" 
 if [ $# -eq 0 ]; then
-  echo "[ERR] command line contains no arguments"
+  echo "$PREFERR command line contains no arguments"
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
@@ -19,17 +22,17 @@ filepath=${17}
 movie_type_n=${18}
 target_dir=${19}
 
-[[ -z "$filepath" ]] && (echo "[ERR] video rclone copy wrong filepath is ''"; exit)
+[[ -z "$filepath" ]] && (echo "$PREFERR video rclone copy wrong filepath is ''"; exit)
 
 dirpath=$(dirname $filepath)
 subdir=${dirpath/$target_dir/}
-[[ -z "$subdir" ]] && (echo "[ERR] video rclone copy wrong subdir is ''"; exit)
+[[ -z "$subdir" ]] && (echo "$PREFERR video rclone copy wrong subdir is ''"; exit)
 
 remotedir=$WCM_ID$subdir
-[[ -z "$remotedir" ]] && (echo "[ERR] video rclone copy wrong remotedir is ''"; exit)
+[[ -z "$remotedir" ]] && (echo "$PREFERR video rclone copy wrong remotedir is ''"; exit)
 
 # VIDEO COPY
-[[ ! -z "$DEBUG" ]] && echo "[LOG] video rclone copy $filepath $WCM_STORER:$remotedir" 
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG video rclone copy $filepath $WCM_STORER:$remotedir" 
 rclone copy $filepath $WCM_STORER:$remotedir &
 
 
@@ -39,14 +42,14 @@ audio_hw_name_var="MOTION_AUDIO_$cam_id"
 audio_hw=${!audio_hw_name_var:-"plughw:0"}
 ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*.wav)
 arecord_pid=$(echo $ps_line | awk '{print $1}')
-if [[ -z "$arecord_pid" ]]; then echo "[ERR] kill arecord_pid is ''"; else
-  [[ ! -z "$DEBUG" ]] && echo "[LOG] kill $arecord_pid"
+if [[ -z "$arecord_pid" ]]; then echo "$PREFERR kill arecord_pid is ''"; else
+  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG kill $arecord_pid"
   kill $arecord_pid
 
   #audiofilepath=$(echo $ps_line | awk '{print $11}')
   audiofilepath=$filepath.wav
-  if [[ -z "$audiofilepath" ]]; then echo "[ERR] audio rclone copy  wrong audiofilepath is ''"; else
-    [[ ! -z "$DEBUG" ]] && echo "[LOG] (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
-    (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &
+  if [[ -z "$audiofilepath" ]]; then echo "$PREFERR audio rclone copy  wrong audiofilepath is ''"; else
+    [[ ! -z "$DEBUG" ]] && echo "$PREFLOG (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
+    (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &
   fi
 fi
