@@ -8,7 +8,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
-WCM_ID=${MOTION_ALIAS:-$(hostname)}
+MOTION_NAME=${WCM_MOTION_NAME:-$(hostname)}
 
 year=$1; month=$2; day=$3
 hour=$4; minutes=$5; seconds=$6
@@ -28,12 +28,12 @@ dirpath=$(dirname $filepath)
 subdir=${dirpath/$target_dir/}
 [[ -z "$subdir" ]] && (echo "$PREFERR video rclone copy wrong subdir is ''"; exit)
 
-remotedir=$WCM_ID$subdir
+remotedir=$MOTION_NAME$subdir
 [[ -z "$remotedir" ]] && (echo "$PREFERR video rclone copy wrong remotedir is ''"; exit)
 
 # VIDEO COPY
-[[ ! -z "$DEBUG" ]] && echo "$PREFLOG video rclone copy $filepath $WCM_STORER:$remotedir" 
-rclone copy $filepath $WCM_STORER:$remotedir &
+[[ ! -z "$DEBUG" ]] && echo "$PREFLOG video rclone copy $filepath $WCM_STORER:/$remotedir" 
+rclone copy $filepath $WCM_STORER:/$remotedir &
 
 
 # AUDIO COPY
@@ -49,7 +49,7 @@ if [[ -z "$arecord_pid" ]]; then echo "$PREFERR kill arecord_pid is ''"; else
   #audiofilepath=$(echo $ps_line | awk '{print $11}')
   audiofilepath=$filepath.wav
   if [[ -z "$audiofilepath" ]]; then echo "$PREFERR audio rclone copy  wrong audiofilepath is ''"; else
-    [[ ! -z "$DEBUG" ]] && echo "$PREFLOG (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &"
-    (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:$remotedir) &
+    [[ ! -z "$DEBUG" ]] && echo "$PREFLOG (sleep 5; kill -9 $arecord_pid > /dev/null; rclone copy $audiofilepath $WCM_STORER:/$remotedir) &"
+    (sleep 5; kill -9 $arecord_pid &> /dev/null; rclone copy $audiofilepath $WCM_STORER:/$remotedir) &
   fi
 fi

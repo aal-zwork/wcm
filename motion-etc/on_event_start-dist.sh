@@ -8,7 +8,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
-WCM_ID=${MOTION_ALIAS:-$(hostname)}
+MOTION_NAME=${WCM_MOTION_NAME:-$(hostname)}
 
 year=$1; month=$2; day=$3
 hour=$4; minutes=$5; seconds=$6
@@ -22,10 +22,7 @@ filepath=${17}
 movie_type_n=${18}
 target_dir=${19}
 
-dirpath=$(dirname $filepath)
-subdir=${dirpath/$target_dir/}
-remotedir=$WCM_ID$subdir
-
-[[ ! -z "$DEBUG" ]] && echo "$PREFLOG rclone copy $filepath $WCM_STORER:$remotedir" 
-[[ ! -z "$filepath" ]] && [[ ! -z "$remotedir" ]] && (rclone copy $filepath $WCM_STORER:$remotedir &) || \
-  echo "$PREFERR rclone copy wrong filepath($filepath) or remotedir($remotedir)"
+if [[ ! -z "$WCM_SERVER" ]]; then
+  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG http --ignore-stdin $WCM_SERVER/cb/motion/start/$MOTION_NAME/$cam_id"
+  http --ignore-stdin $WCM_SERVER/cb/motion/start/$MOTION_NAME/$cam_id 2>/dev/null | jq '.object==true' | grep -q true
+fi

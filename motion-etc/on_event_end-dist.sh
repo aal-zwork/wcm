@@ -8,7 +8,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
-WCM_ID=${MOTION_ALIAS:-$(hostname)}
+MOTION_NAME=${WCM_MOTION_NAME:-$(hostname)}
 
 year=$1; month=$2; day=$3
 hour=$4; minutes=$5; seconds=$6

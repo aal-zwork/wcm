@@ -1,0 +1,31 @@
+# Replace all occurred first:
+# motion_hostname
+# motion_admin_port
+# telegram_token
+# telegram_user_or_group_id
+# admin_user
+# proxy_hostname
+#
+# motion_hostname       def: motion
+# motion_admin_port     def: 8080
+# wcm_hostname          def: api(0.0.0.0)
+# wcm_port,             def: 20000
+http_server:
+  listen: "0.0.0.0:20000"
+motion:
+  uris:
+    - "http://motion:8080"
+  cam_names:
+    motion:8080:
+      0: Камера
+telegram:
+  token: "telegram_token"
+  accesses:
+    users:
+      admin_user: telegram_user_or_group_id
+    permits:
+      ADMIN:
+        - admin_user 
+#daemon: false
+#proxy: "http://proxy_hostname:8118"
+pid: /var/run/wcm.pid

@@ -2,10 +2,10 @@ FROM alpine
 
 WORKDIR /tmp
 RUN apk update && apk upgrade && \
-    apk add --no-cache git autoconf automake build-base linux-headers \
+    apk add --no-cache tini git autoconf automake build-base linux-headers \
     libjpeg-turbo-dev libmicrohttpd-dev libzip-dev ffmpeg-dev gettext-dev \
     libmicrohttpd ffmpeg gettext libjpeg-turbo tzdata curl bash unzip \
-    alsa-utils && \
+    alsa-utils httpie jq && \
     curl https://rclone.org/install.sh | bash && \
     git clone https://github.com/Motion-Project/motion.git && \
     cd motion && autoreconf -fiv && \
@@ -31,4 +31,4 @@ RUN if [ ! -f motion/motion.conf ]; then cp -f motion/motion-dist.conf motion/mo
 COPY sh/* /usr/local/bin/
 
 WORKDIR /var/lib/motion
-CMD [ "motion-run" ]
+ENTRYPOINT [ "tini", "-v", "--", "motion-run" ]

@@ -1,4 +1,9 @@
+*.swp
 /*.env
-!/example.env
+!/*.example.env
 
-rclone-etc/rclone.conf
+/*-etc/**/*
+!/rclone-etc/rclone-dist.conf
+!/api-etc/wcm-dist.yml
+!/motion-etc/motion-dist.conf
+!/motion-etc/*-dist.sh

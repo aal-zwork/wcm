@@ -8,7 +8,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 WCM_STORER=${RCLONE_REMOTE_NAME:-"wcm-storer"}
-WCM_ID=${MOTION_ALIAS:-$(hostname)}
+MOTION_NAME=${WCM_MOTION_NAME:-$(hostname)}
 
 year=$1; month=$2; day=$3
 hour=$4; minutes=$5; seconds=$6
@@ -23,11 +23,11 @@ movie_type_n=${18}
 target_dir=${19}
 
 subdir=/$cam_id/$year/$month/$day/$hour
-remotedir=$WCM_ID$subdir
+remotedir=$MOTION_NAME$subdir
 
 if [[ -z "$remotedir" ]]; then echo "$PREFERR mkdir remotedir is ''"; else
-  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG rclone mkdir $WCM_STORER:$remotedir" 
-  rclone mkdir $WCM_STORER:$remotedir &
+  [[ ! -z "$DEBUG" ]] && echo "$PREFLOG rclone mkdir $WCM_STORER:/$remotedir" 
+  rclone mkdir $WCM_STORER:/$remotedir &
 fi
 
 # AUDIO REСORD
@@ -37,7 +37,7 @@ audio_hw=${!audio_hw_name_var:-"plughw:0"}
 ps_line=$(ps aux | grep -e [a]record.-D.$audio_hw.*.wav)
 arecord_pid=$(echo $ps_line | awk '{print $1}')
 if [[ ! -z "$arecord_pid" ]]; then 
-  [[ ! -z "$DEBUG" ]] && echo "$PREFWRN kill -9 $arecord_pid &> /dev/null" 
+  echo "$PREFWRN kill -9 $arecord_pid &> /dev/null" 
   kill -9 $arecord_pid &> /dev/null 
 fi
 if [[ -z "$audio_hw" ]]; then echo "$PREFWRN arecord audio_hw for cam($cam_id) is ''"; else
